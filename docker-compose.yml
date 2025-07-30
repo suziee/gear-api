@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  importer:
+    image: gear-api
+    container_name: gear-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ../02-db/home/gear.db
+        target: /home/gear.db
+        read_only: true
+    stdin_open: true
+    tty: true
+    ports:
+      - "5275:80"
