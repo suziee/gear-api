@@ -1,25 +1,13 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS publish
 WORKDIR /app
 COPY . .
-RUN dotnet restore "./Api.Gear.csproj"
-RUN dotnet build "Api.Gear.csproj" \
-    -c Release \
-    --no-restore \
-    --runtime alpine-x64 \
-    --self-contained true \
-    -p:PublishSingleFile=true
-
-FROM build AS publish
-RUN dotnet publish "Api.Gear.csproj" \
-    -c Release \
+RUN dotnet restore
+RUN dotnet publish \
+    -c release \
     -o /app/publish \
-    --no-restore \
-    --no-build \
-    --runtime alpine-x64 \
-    --self-contained true \
-    -p:PublishSingleFile=true
+    --no-restore
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-alpine AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 

@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   importer:
     image: gear-api
@@ -12,6 +10,9 @@ services:
         source: ../02-db/home/gear.db
         target: /home/gear.db
         read_only: true
+      - type: bind
+        source: appsettings.json
+        target: /app/appsettings.json
     stdin_open: true
     tty: true
     ports:
